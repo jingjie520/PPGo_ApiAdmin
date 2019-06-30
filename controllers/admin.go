@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/george518/PPGo_ApiAdmin/libs"
-	"github.com/george518/PPGo_ApiAdmin/models"
+	"streamConsole/libs"
+	"streamConsole/models"
 )
 
 type AdminController struct {

@@ -12,12 +12,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/george518/PPGo_ApiAdmin/libs"
-	"github.com/george518/PPGo_ApiAdmin/utils"
+	"streamConsole/libs"
+	"streamConsole/utils"
 
 	"github.com/astaxie/beego"
-	"github.com/george518/PPGo_ApiAdmin/models"
 	cache "github.com/patrickmn/go-cache"
+	"streamConsole/models"
 )
 
 const (

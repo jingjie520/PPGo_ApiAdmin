@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/george518/PPGo_ApiAdmin/libs"
-	"github.com/george518/PPGo_ApiAdmin/models"
-	"github.com/george518/PPGo_ApiAdmin/utils"
 	cache "github.com/patrickmn/go-cache"
+	"streamConsole/libs"
+	"streamConsole/models"
+	"streamConsole/utils"
 )
 
 type LoginController struct {

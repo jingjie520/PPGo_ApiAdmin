@@ -62,7 +62,7 @@ API新增界面<br/>
 
 前台访问：http://your_host:8081
 后台访问：http://your_host:8081/login
-用户名：admin 密码：george518    
+用户名：admin 密码：123qwe    
 
 联系我
 ----
