@@ -8,9 +8,6 @@ var Snow = {
     getOnOrOff: function (val) {
         var color = val === "off" ? "#ff0000" : "#11cd6e",
             text = val === "off" ? "关闭" : "开启";
-
-        console.log(val);
-
         return '<span style="color:' + color + '">' + text + '</span>';
     }
 };
