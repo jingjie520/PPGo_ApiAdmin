@@ -1,29 +1,27 @@
-<style>
-    .nav-title{
-        display: none;
-    }
-</style>
-<div style="margin:50px auto;width: 400px;">
+<div style="padding-left: 40px;margin-top: 20px;">
 <form class="layui-form" action="" method="post" >
     <div class="layui-form-item">
-        <label class="layui-form-label">选择分组</label>
+        <label class="layui-form-label">节目名称</label>
         <div class="layui-input-inline">
-            <select name="group_id" lay-verify="required"  lay-search="" style="width: 100%">
-                <option value="">请选择分组</option>
-                {{range $index,$elem := .Groups}}
-                <option value="{{$elem.id}}">{{$elem.group_name}}</option>
-                {{end}}
-            </select>
+            <input type="text" name="name" id="name" lay-verify="required" autocomplete="off" placeholder="节目名称" class="layui-input" value="">
         </div>
         <div class="layui-form-mid layui-word-aux">*</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">资源名称</label>
+        <label class="layui-form-label">节目ID</label>
         <div class="layui-input-inline">
-            <input type="text" name="source_name" id="source_name" lay-verify="required" autocomplete="off" placeholder="资源名称" class="layui-input" value="">
+            <input type="text" name="channelID" id="channelID" lay-verify="required" autocomplete="off" placeholder="节目ID" class="layui-input" value="">
         </div>
         <div class="layui-form-mid layui-word-aux">*</div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">源流地址</label>
+        <div class="layui-input-inline" style="width: 400px">
+            <input type="text" name="src" id="src" lay-verify="required" autocomplete="off" placeholder="源流地址" class="layui-input" value="">
+        </div>
+    </div>
+
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="sub">保存</button>
@@ -42,8 +40,8 @@ var $;
     
         form.on('submit(sub)', function(data){
             var form_data = data.field;
-            $.post('{{urlfor "ApiSourceController.AjaxSave"}}', form_data, function (out) {
-                if (out.status == 0) {
+            $.post('{{urlfor "ChannelController.AjaxSave"}}', form_data, function (out) {
+                if (out.status === 0) {
                     layer.msg("操作成功",{icon: 1},function () {
                         window.parent.layer.closeAll();
                         window.parent.location.reload();

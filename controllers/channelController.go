@@ -36,6 +36,7 @@ func (self *ChannelController) Table() {
 	for k, v := range result {
 		row := make(map[string]interface{})
 		row["id"] = v.ID
+		row["channelID"] = v.ChannelID
 		row["name"] = v.Name
 		row["src"] = v.Src
 		row["group"] = v.Group
@@ -43,6 +44,7 @@ func (self *ChannelController) Table() {
 		row["vod"] = v.Vod
 		row["tsoc"] = v.TSoc
 		row["toaac"] = v.ToAac
+		row["demux"] = v.DeMux
 		list[k] = row
 	}
 	self.ajaxList("成功", MSG_OK, count, list)
