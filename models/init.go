@@ -42,10 +42,18 @@ func Init() {
 	if beego.AppConfig.String("runmode") == "dev" {
 		orm.Debug = true
 	}
+	InitIptv()
 
 	InitMongo()
 
 	GetMgo()
+}
+
+var IptvUrl string = "" //iptv地址
+func InitIptv() {
+	iptvIp := beego.AppConfig.String("iptv.ip")
+	iptvPort := beego.AppConfig.String("iptv.port")
+	IptvUrl = iptvIp + ":" + iptvPort
 }
 
 var (

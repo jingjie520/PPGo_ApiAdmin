@@ -1,7 +1,9 @@
 package models
 
 import (
+	"errors"
 	"gopkg.in/mgo.v2/bson"
+	"strings"
 )
 
 type ChannelEntity struct {
@@ -61,11 +63,24 @@ func ChannelGetByName(name string) (*ChannelEntity, error) {
 	return r, nil
 }
 
+func checkChannelId(a *ChannelEntity) error {
+	if strings.ToLower(a.ChannelID) == "all" {
+		return errors.New("节目ID不是是all")
+	}
+	return nil
+}
+
 func ChannelAdd(a *ChannelEntity) error {
+	if err := checkChannelId(a); err != nil {
+		return err
+	}
 	return GetDataBase().C(a.TableName()).Insert(a)
 }
 
 func (a *ChannelEntity) Update(fields ...string) error {
+	if err := checkChannelId(a); err != nil {
+		return err
+	}
 	err := GetDataBase().C(a.TableName()).UpdateId(a.ID, a)
 	if err != nil {
 		return err

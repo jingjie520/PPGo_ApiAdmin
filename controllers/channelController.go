@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"streamConsole/libs"
 	"streamConsole/models"
 	"strings"
 )
@@ -52,6 +54,11 @@ func (self *ChannelController) Table() {
 
 func (self *ChannelController) Add() {
 	self.Data["pageTitle"] = "新增频道"
+
+	//装载网卡下拉框
+	self.Data["netcards"] = libs.GetNetCards()
+	fmt.Println(self.Data["netcards"])
+
 	self.display()
 }
 
