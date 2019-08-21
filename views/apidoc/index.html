@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Stream Console 接口平台</title>
+        <title>{{.siteName}} 接口平台</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -18,8 +18,8 @@
 
     <div class="layui-header">
         <div style="float: left;background: #393D49;width:20%;height: 60px;line-height: 60px;">
-           <a class="" href="/" style="margin-left: 20px;">
-                <img src="/static/img/logo.png" alt="ppgo_admin" style="width: 100px;">
+           <a class="" href="/" style="margin-left: 20px; font-size:24px; color: aliceblue">
+                {{.appName}}
             </a> 
         </div>
         <div style="float: right;width: 80%;">
@@ -85,15 +85,14 @@
                 {{end}}
                 {{end}}
             </ul>
-            <div style="clear:both"></div>
-            <div class="copyrights">power by ppgo_admin</div>
         </div>
 
         <div class="site-content layui-col-md10">
-            <div class="site-content-header"><i class="fa fa-bars" aria-hidden="true" id="taggle"></i>&nbsp;&nbsp;<span id="content-title">欢迎使用Stream Console</span> </div>
+            <div class="site-content-header"><i class="fa fa-bars" aria-hidden="true" id="taggle"></i>&nbsp;&nbsp;<span id="content-title">欢迎使用 {{.appName}} {{.version}}</span> </div>
             <div id="api-main">
                 <div style="width: 200px;height: 50px;margin: 200px auto;">
-                    <img src="/static/img/logo_white.png" alt="">
+
+
                 </div>
             </div>
         </div>

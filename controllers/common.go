@@ -43,6 +43,7 @@ func (self *BaseController) Prepare() {
 	controllerName, actionName := self.GetControllerAndAction()
 	self.controllerName = strings.ToLower(controllerName[0 : len(controllerName)-10])
 	self.actionName = strings.ToLower(actionName)
+	self.Data["appName"] = beego.AppConfig.String("appname")
 	self.Data["version"] = beego.AppConfig.String("version")
 	self.Data["siteName"] = beego.AppConfig.String("site.name")
 	self.Data["curRoute"] = self.controllerName + "." + self.actionName

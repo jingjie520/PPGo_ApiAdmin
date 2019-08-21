@@ -74,9 +74,11 @@
 	height: 35px;
 	line-height: 35px
 }
-
+.layui-layout-admin .layui-body{
+	bottom:0;
+}
 .kit-layout-admin .layui-body {
-	bottom: 35px;
+	/*bottom: 35px;*/
 	top: 50px
 }
 
@@ -222,11 +224,11 @@
 
 .kit-tab .kit-tab-tool {
 	position: absolute;
-	width: 10px;
+	width: 19px;
 	height: 40px;
 	top: 0;
-	right: 10px;
-	/*border-left: 1px solid #e2e2e2;*/
+	right: 0px;
+	border-left: 1px solid #e2e2e2;
 	line-height: 40px;
 	text-align: center;
 	cursor: pointer;
@@ -280,6 +282,9 @@
 .kit-tab .layui-tab-content iframe {
 	width: 100%;
 	border: 0
+}
+.layui-layout-admin .layui-logo{
+	color: aliceblue; font-size: x-large;
 }
 
 @media screen and (max-width:950px) {
