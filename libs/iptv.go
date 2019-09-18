@@ -2,6 +2,7 @@ package libs
 
 import (
 	"encoding/json"
+	"strconv"
 	"streamConsole/models"
 	"streamConsole/utils"
 )
@@ -30,6 +31,42 @@ func GetNetCards() []NetCard {
 	return result
 }
 
+func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
+	url := "/channel"
+	param := "id=" + channel.ID.Hex()
+
+	if channel.Group != "" {
+		param += "&group=" + channel.Group
+	}
+	if channel.Single != "" {
+		param += "&single=" + channel.Single
+	}
+	if channel.Vod != "" {
+		param += "&vod=" + channel.Vod
+	}
+	if channel.TSoc != "" {
+		param += "&tSoc=" + channel.TSoc
+	}
+
+	return doRequestGet(url, param)
+
+}
+
+func SaveChannelEntity(channel *models.ChannelEntity, param string) (string, error) {
+	url := "/manage"
+
+	param += "&name=" + channel.Name
+	param += "&src=" + channel.Src
+	param += "&netcardin=" + channel.NetCardin
+	param += "&program=" + strconv.Itoa(channel.Program)
+	param += "&group=" + channel.Group
+	param += "&single=" + channel.Single
+	param += "&vod=" + channel.Vod
+	param += "&tSoc=" + channel.TSoc
+
+	return doRequestGet(url, param)
+}
+
 func ManageAll() interface{} {
 	status, dat := doRequest("/manage", "query=all")
 
@@ -38,6 +75,11 @@ func ManageAll() interface{} {
 	}
 	utils.ConsoleLogs.Info("status{},{}", status, dat)
 	return ""
+}
+
+func doRequestGet(url string, param string) (string, error) {
+	requestUrl := "http://" + models.IptvUrl + url + "?" + param
+	return utils.HttpGet(requestUrl)
 }
 
 func doRequest(url string, param string) (int, interface{}) {

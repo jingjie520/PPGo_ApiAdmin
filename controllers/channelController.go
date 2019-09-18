@@ -85,22 +85,117 @@ func (self *ChannelController) Edit() {
 	self.display()
 }
 
+func (self *ChannelController) ActionStart() {
+	self.Data["pageTitle"] = "启动频道"
+	id := self.GetString("id", "")
+	v, err := models.ChannelGetById(id)
+	if err != nil {
+		self.Ctx.WriteString("频道不存在")
+		return
+	}
+	row := make(map[string]interface{})
+	row["id"] = v.ID.Hex()
+	row["name"] = v.Name
+
+	row["src"] = v.Src
+	row["group"] = v.Group
+	row["single"] = v.Single
+	row["vod"] = v.Vod
+	row["tsoc"] = v.TSoc
+
+	self.Data["Source"] = row
+	self.display()
+}
+
+func (self *ChannelController) ActionStop() {
+	self.Data["pageTitle"] = "停止频道"
+	id := self.GetString("id", "")
+	v, err := models.ChannelGetById(id)
+	if err != nil {
+		self.Ctx.WriteString("频道不存在")
+		return
+	}
+	row := make(map[string]interface{})
+	row["id"] = v.ID
+	row["name"] = v.Name
+
+	row["group"] = v.Group
+	row["single"] = v.Single
+	row["vod"] = v.Vod
+	row["tsoc"] = v.TSoc
+
+	self.Data["Source"] = row
+	self.display()
+}
+
+func (self *ChannelController) AjaxStartSave() {
+	id := self.GetString("id", "")
+	if id != "" {
+		channel, _ := models.ChannelGetById(id)
+		channel.Group = strings.TrimSpace(self.GetString("group"))
+		channel.Single = strings.TrimSpace(self.GetString("single"))
+		channel.Vod = strings.TrimSpace(self.GetString("vod"))
+		channel.TSoc = strings.TrimSpace(self.GetString("tsoc"))
+
+		//请求api
+		_, err := libs.SaveChannelStatus(channel)
+
+		if err == nil {
+			self.ajaxMsg("", MSG_OK)
+		} else {
+			self.ajaxMsg(err.Error(), MSG_ERR)
+		}
+	} else {
+		self.ajaxMsg("记录不存在", MSG_ERR)
+	}
+}
+
+func (self *ChannelController) AjaxStopSave() {
+	self.AjaxStartSave()
+}
+
 //存储资源
 func (self *ChannelController) AjaxSave() {
 	id := self.GetString("id", "")
 	if id == "" {
-		Api := new(models.ChannelEntity)
+		channel := new(models.ChannelEntity)
 
-		Api.Name = strings.TrimSpace(self.GetString("name"))
+		channel.ChannelID = strings.TrimSpace(self.GetString("channelID"))
+		channel.Name = strings.TrimSpace(self.GetString("name"))
+		channel.Src = strings.TrimSpace(self.GetString("src"))
+		channel.Program, _ = self.GetInt("program", 0)
+
+		channel.Group = strings.TrimSpace(self.GetString("group"))
+		channel.Single = strings.TrimSpace(self.GetString("single"))
+		channel.Vod = strings.TrimSpace(self.GetString("vod"))
+		channel.TSoc = strings.TrimSpace(self.GetString("tsoc"))
+
+		channel.NetCardin = strings.TrimSpace(self.GetString("netcardin"))
+
+		param := "type=add&id=" + channel.ChannelID
+		param += "&netcard=" + strings.TrimSpace(self.GetString("netcard"))
+		param += "&groupurl=" + strings.TrimSpace(self.GetString("groupurl"))
+
+		if channel.TSoc == "on" {
+			param += "&tsoctime=36000"
+		}
+		if channel.Vod == "on" {
+			param += "&vodtime=36000"
+		}
 
 		// 检查登录名是否已经存在
-		_, err := models.ChannelGetByName(Api.Name)
+		_, err := models.ChannelGetByName(channel.Name)
 
 		if err == nil {
 			self.ajaxMsg("频道名称已经存在", MSG_ERR)
 		}
 
-		if err := models.ChannelAdd(Api); err != nil {
+		//请求api
+		_, err = libs.SaveChannelEntity(channel, param)
+
+		// err := models.ChannelAdd(channel);
+
+		if err != nil {
 			self.ajaxMsg(err.Error(), MSG_ERR)
 		}
 		self.ajaxMsg("", MSG_OK)

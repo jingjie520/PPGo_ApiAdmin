@@ -1,0 +1,60 @@
+<style>
+    .nav-title {
+        display: none;
+    }
+</style>
+<div style="margin:20px auto;width: 400px;">
+    <form class="layui-form" action="" method="post">
+        <input type="hidden" id="id" name="id" value="{{.Source.id}}">
+        <div class="layui-form-item">
+            <input type="checkbox" name="group" lay-filter="env_ids" title="组播" value="stop"
+                   {{if eq  .Source.group "off"}}checked disabled{{end}}>
+            <input type="checkbox" name="single" lay-filter="env_ids" title="单播" value="stop"
+                   {{if eq  .Source.single "off"}}checked disabled{{end}}>
+            <input type="checkbox" name="vod" lay-filter="env_ids" title="回看" value="stop"
+                   {{if eq  .Source.vod "off"}}checked disabled{{end}}>
+            <input type="checkbox" name="tsoc" lay-filter="env_ids" title="时移" value="stop"
+                   {{if eq  .Source.tsoc "off"}}checked disabled{{end}}>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="sub">保存</button>
+                <button class="layui-btn layui-btn-primary btn-cancel">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var $;
+    layui.config({
+        base: "js/"
+    }).use(['form', 'element', 'layer', 'jquery'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        var $ = layui.jquery;
+
+        $(".btn-cancel").click(function () {
+            window.parent.layer.closeAll();
+        });
+
+        form.on('submit(sub)', function (data) {
+            var form_data = data.field;
+            $.post('{{urlfor "ChannelController.AjaxStopSave"}}', form_data, function (out) {
+                if (out.status == 0) {
+                    layer.msg("操作成功", {icon: 1}, function () {
+                        window.parent.layer.closeAll();
+                        window.parent.location.reload();
+                    })
+                } else {
+                    layer.msg(out.message)
+                }
+            }, "json");
+            return false;
+        });
+
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+        form.render();
+    });
+</script>
