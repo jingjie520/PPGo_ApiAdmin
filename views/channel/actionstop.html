@@ -41,6 +41,7 @@
         form.on('submit(sub)', function (data) {
             var form_data = data.field;
             $.post('{{urlfor "ChannelController.AjaxStopSave"}}', form_data, function (out) {
+                console.log(out.message);
                 if (out.status == 0) {
                     layer.msg("操作成功", {icon: 1}, function () {
                         window.parent.layer.closeAll();

@@ -50,7 +50,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">组播PID</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="program" id="program" lay-verify="required" autocomplete="off"
+                    <input type="text" name="program" id="program"  autocomplete="off"
                            placeholder=""
                            class="layui-input" value="">
                 </div>
@@ -61,7 +61,7 @@
                 <label class="layui-form-label">组播网卡</label>
 
                 <div class="layui-input-inline">
-                    <select name="source_id" lay-verify="required" lay-search="" style="width: 100%">
+                    <select name="netcardin"  lay-search="" style="width: 100%">
                         <option value="*">*(all)</option>
                         {{range $index,$elem := .netcards}}
                             <option value="{{$elem.Name}}"> {{$elem.Name}}({{$elem.Ip}}}})</option>
@@ -75,8 +75,8 @@
                 <label class="layui-form-label">单播</label>
                 <div class="layui-input-inline">
                     <select name="single" lay-verify="required" lay-search="" style="width: 100%">
-                        <option value="off">OFF</option>
                         <option value="on">ON</option>
+                        <option value="off">OFF</option>
                     </select>
                 </div>
                 <div class="layui-form-mid layui-word-aux">*</div>
@@ -100,7 +100,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">组播输出</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="groupurl" id="groupurl" lay-verify="required" autocomplete="off"
+                    <input type="text" name="groupurl" id="groupurl"   autocomplete="off"
                            placeholder=""
                            class="layui-input" value="">
                 </div>
@@ -111,7 +111,7 @@
                 <label class="layui-form-label">输出网卡</label>
 
                 <div class="layui-input-inline">
-                    <select name="netcard" lay-verify="required" lay-search="" style="width: 100%">
+                    <select name="netcard"  lay-search="" style="width: 100%">
                         <option value="*">*(all)</option>
                         {{range $index,$elem := .netcards}}
                             <option value="{{$elem.Name}}"> {{$elem.Name}}({{$elem.Ip}}}})</option>
@@ -136,7 +136,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">时移</label>
                 <div class="layui-input-inline">
-                    <select name="tsoc" lay-verify="required" lay-search="" style="width: 100%">
+                    <select name="tsoc"  lay-search="" style="width: 100%">
                         <option value="off">OFF</option>
                         <option value="on">ON</option>
                     </select>
@@ -148,7 +148,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">音频转码</label>
                     <div class="layui-input-inline">
-                        <select name="toaac" lay-verify="required" lay-search="" style="width: 100%">
+                        <select name="toaac"  lay-search="" style="width: 100%">
                             <option value="off">OFF</option>
                             <option value="on">ON</option>
                         </select>
@@ -179,8 +179,7 @@
             $.post('{{urlfor "ChannelController.AjaxSave"}}', form_data, function (out) {
                 if (out.status === 0) {
                     layer.msg("操作成功", {icon: 1}, function () {
-                        window.parent.layer.closeAll();
-                        window.parent.location.reload();
+                        window.location.href = './list'
                     })
                 } else {
                     layer.msg(out.message)

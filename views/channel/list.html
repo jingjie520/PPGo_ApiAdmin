@@ -6,8 +6,8 @@
         <div class="layui-col-xs6 search_text">
             <form class="layui-form" action="" onsubmit="javascript:return false;">
                 <div class="demoTable">
-                    <div class="layui-inline" style="width: 40%">
-                        <input class="layui-input" name="name" id="name" autocomplete="off" placeholder="节目名称">
+                    <div class="layui-inline" style="width: 40%;display: none">
+                        <input class="layui-input " name="name" id="name" autocomplete="off" placeholder="节目名称">
                     </div>
                     <button class="layui-btn" data-type="reload">查询</button>
                 </div>
@@ -19,13 +19,13 @@
     </table>
     <script type="text/html" id="bar">
         <a class="layui-btn layui-btn-xs" lay-event="start" data-method="notice">启动</a>
-        <a class="layui-btn layui-btn-xs" lay-event="stop"  data-method="notice">停止</a>
+        <a class="layui-btn layui-btn-xs" lay-event="stop" data-method="notice">停止</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 </div>
 <script>
-    layui.use(['table', 'form', 'element','layer'], function () {
+    layui.use(['table', 'form', 'element', 'layer'], function () {
         var table = layui.table;
         var form = layui.form;
         var element = layui.element;
@@ -58,10 +58,28 @@
                         return Snow.getOnOrOff(d.tsoc);
                     }
                 }
-                , {field: 'toaac', width: 100, title: '音频转码', templet: function (d) {
+                , {
+                    field: 'toaac', width: 100, title: '音频转码', templet: function (d) {
                         return Snow.getOnOrOff(d.toaac);
-                    }}
-                , {field: 'demux', width: 100, title: '节目状态'}
+                    }
+                }
+                , {
+                    field: 'demux', width: 100, title: '节目状态', templet: function (d) {
+                        return Snow.getDemux(d.toaac);
+                    }
+                }, {
+                    field: 'curGroup', width: 100, title: '组播状态', templet: function (d) {
+                        return Snow.getOnOrOff(d.toaac);
+                    }
+                }, {
+                    field: 'curSingle', width: 100, title: '单播状态', templet: function (d) {
+                        return Snow.getOnOrOff(d.toaac);
+                    }
+                }, {
+                    field: 'curVod', width: 100, title: '回看状态', templet: function (d) {
+                        return Snow.getOnOrOff(d.toaac);
+                    }
+                }
                 , {fixed: 'right', width: 210, align: 'center', toolbar: '#bar'}
             ]]
             , id: 'listReload'
@@ -103,10 +121,10 @@
                     id: 1,
                     title: "停止-" + data.name,
                     content: '{{urlfor "ChannelController.ActionStop"}}?id=' + data.id,
-                    area: ['500px', '300px'],
+                    area: ['480px', '210px'],
                 });
             } else if (obj.event === 'del') {
-                layer.confirm('真的删除【' + data.source_name + '】频道么', function (index) {
+                layer.confirm('真的删除【' + data.name + '】频道么', function (index) {
                     var jsData = {'id': data.id};
                     $.post('{{urlfor "ChannelController.AjaxDel"}}', jsData, function (out) {
                         if (out.status === 0) {
@@ -122,14 +140,7 @@
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
-                    type: 2,
-                    shade: 0.3,
-                    id: 1,
-                    title: "编辑-" + data.name,
-                    content: './edit?id=' + data.id,
-                    area: ['500px', '300px'],
-                });
+                window.location.href = './edit?id=' + data.id
             }
         });
 

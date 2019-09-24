@@ -7,7 +7,6 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/smartystreets/goconvey v0.0.0-20190731233626-505e41936337
-	github.com/tidwall/gjson v1.3.2
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 )
 

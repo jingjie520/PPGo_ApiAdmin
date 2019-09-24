@@ -2,7 +2,6 @@ package libs
 
 import (
 	"encoding/json"
-	"strconv"
 	"streamConsole/models"
 	"streamConsole/utils"
 )
@@ -31,9 +30,20 @@ func GetNetCards() []NetCard {
 	return result
 }
 
+// GetSerialCode 获取序列号
+func GetSerialCode() (string, error) {
+	return doRequestGet("/encry", "type=get")
+}
+
+func DeleteChannel(channel *models.ChannelEntity) (string, error) {
+	url := "/manage"
+	param := "type=delete&id=" + channel.ChannelID
+	return doRequestGet(url, param)
+}
+
 func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
 	url := "/channel"
-	param := "id=" + channel.ID.Hex()
+	param := "id=" + channel.ChannelID
 
 	if channel.Group != "" {
 		param += "&group=" + channel.Group
@@ -54,16 +64,6 @@ func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
 
 func SaveChannelEntity(channel *models.ChannelEntity, param string) (string, error) {
 	url := "/manage"
-
-	param += "&name=" + channel.Name
-	param += "&src=" + channel.Src
-	param += "&netcardin=" + channel.NetCardin
-	param += "&program=" + strconv.Itoa(channel.Program)
-	param += "&group=" + channel.Group
-	param += "&single=" + channel.Single
-	param += "&vod=" + channel.Vod
-	param += "&tSoc=" + channel.TSoc
-
 	return doRequestGet(url, param)
 }
 

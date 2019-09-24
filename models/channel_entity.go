@@ -23,6 +23,8 @@ type ChannelEntity struct {
 	CurVod    string        `bson:"cur_vod"`
 	CurTsoc   string        `bson:"cur_tsoc"`
 	DeMux     int           `bson:"demux"`
+	Groupurl  string        `bson:"groupurl"`
+	NetCard   string        `bson:"netcard"`
 }
 
 func (a *ChannelEntity) TableName() string {

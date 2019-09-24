@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"net/url"
 	"streamConsole/libs"
 	"streamConsole/models"
 	"strings"
@@ -27,7 +28,6 @@ func (self *ChannelController) Table() {
 		limit = 30
 	}
 
-	//sourceName := strings.TrimSpace(self.GetString("sourceName"))
 	self.pageSize = limit
 	//查询条件
 	filters := make([]interface{}, 0)
@@ -72,16 +72,34 @@ func (self *ChannelController) Edit() {
 		return
 	}
 	row := make(map[string]interface{})
-	row["id"] = v.ID
+	row["id"] = v.ID.Hex()
+	row["channelID"] = v.ChannelID
 	row["name"] = v.Name
+
+	if v.NetCardin == "" {
+		row["mode"] = "single"
+	} else {
+		row["mode"] = "group"
+	}
 	row["src"] = v.Src
-	row["group"] = v.Group
+	row["program"] = v.Program
+	row["netcardin"] = v.NetCardin
 	row["single"] = v.Single
+	row["group"] = v.Group
+	row["groupUrl"] = v.Groupurl
+	row["netcard"] = v.NetCard
 	row["vod"] = v.Vod
+
 	row["tsoc"] = v.TSoc
 	row["toaac"] = v.ToAac
-	self.Data["Source"] = row
+	row["curGroup"] = v.CurGroup
+	row["curSingle"] = v.CurSingle
+	row["curVod"] = v.CurVod
 
+	row["toaac"] = v.ToAac
+
+	self.Data["Source"] = row
+	self.Data["netcards"] = libs.GetNetCards()
 	self.display()
 }
 
@@ -116,7 +134,7 @@ func (self *ChannelController) ActionStop() {
 		return
 	}
 	row := make(map[string]interface{})
-	row["id"] = v.ID
+	row["id"] = v.ID.Hex()
 	row["name"] = v.Name
 
 	row["group"] = v.Group
@@ -157,65 +175,79 @@ func (self *ChannelController) AjaxStopSave() {
 //存储资源
 func (self *ChannelController) AjaxSave() {
 	id := self.GetString("id", "")
+	channel := new(models.ChannelEntity)
+
+	channel.ChannelID = strings.TrimSpace(self.GetString("channelID"))
+	channel.Name = strings.TrimSpace(self.GetString("name"))
+	channel.Src = strings.TrimSpace(self.GetString("src"))
+	channel.Vod = strings.TrimSpace(self.GetString("vod"))
+	channel.Single = strings.TrimSpace(self.GetString("single"))
+	channel.Group = strings.TrimSpace(self.GetString("group"))
+	channel.ToAac = strings.TrimSpace(self.GetString("toaac"))
+	channel.TSoc = strings.TrimSpace(self.GetString("tsoc"))
+	param := ""
+
 	if id == "" {
-		channel := new(models.ChannelEntity)
-
-		channel.ChannelID = strings.TrimSpace(self.GetString("channelID"))
-		channel.Name = strings.TrimSpace(self.GetString("name"))
-		channel.Src = strings.TrimSpace(self.GetString("src"))
-		channel.Program, _ = self.GetInt("program", 0)
-
-		channel.Group = strings.TrimSpace(self.GetString("group"))
-		channel.Single = strings.TrimSpace(self.GetString("single"))
-		channel.Vod = strings.TrimSpace(self.GetString("vod"))
-		channel.TSoc = strings.TrimSpace(self.GetString("tsoc"))
-
-		channel.NetCardin = strings.TrimSpace(self.GetString("netcardin"))
-
-		param := "type=add&id=" + channel.ChannelID
-		param += "&netcard=" + strings.TrimSpace(self.GetString("netcard"))
-		param += "&groupurl=" + strings.TrimSpace(self.GetString("groupurl"))
-
-		if channel.TSoc == "on" {
-			param += "&tsoctime=36000"
-		}
-		if channel.Vod == "on" {
-			param += "&vodtime=36000"
-		}
-
+		param = "type=add"
 		// 检查登录名是否已经存在
 		_, err := models.ChannelGetByName(channel.Name)
-
 		if err == nil {
 			self.ajaxMsg("频道名称已经存在", MSG_ERR)
 		}
 
-		//请求api
-		_, err = libs.SaveChannelEntity(channel, param)
-
-		// err := models.ChannelAdd(channel);
-
-		if err != nil {
-			self.ajaxMsg(err.Error(), MSG_ERR)
-		}
-		self.ajaxMsg("", MSG_OK)
 	} else {
-		ApiUpdate, _ := models.ChannelGetById(id)
-		// 修改
-		ApiUpdate.Name = strings.TrimSpace(self.GetString("name"))
-
-		if err := ApiUpdate.Update(); err != nil {
-			self.ajaxMsg(err.Error(), MSG_ERR)
+		param = "type=update"
+		channelTemp, err := models.ChannelGetByName(channel.Name)
+		if err == nil && channelTemp.ID.Hex() != id {
+			self.ajaxMsg("频道名称已经存在", MSG_ERR)
 		}
-		self.ajaxMsg("", MSG_OK)
 	}
+
+	param = "type=add&id=" + channel.ChannelID
+	param += "&name=" + url.QueryEscape(channel.Name)
+	param += "&src=" + url.QueryEscape(channel.Src)
+	param += "&mode=" + strings.TrimSpace(self.GetString("mode"))
+	param += "&vod=" + channel.Vod
+	param += "&single=" + channel.Single
+	param += "&group=" + channel.Group
+	param += "&toaac=" + channel.ToAac
+
+	if strings.TrimSpace(self.GetString("mode")) == "group" {
+		param += "&netcardin=" + strings.TrimSpace(self.GetString("netcardin"))
+		param += "&program=" + strings.TrimSpace(self.GetString("program"))
+	}
+
+	if channel.Vod == "on" {
+		param += "&vodTime=36000" //+ strings.TrimSpace(self.GetString("vodTime"))
+		param += "&vodpath=" + strings.TrimSpace(self.GetString("vodpath"))
+	}
+
+	if channel.Group == "on" {
+		param += "&netcard=" + strings.TrimSpace(self.GetString("netcard"))
+		param += "&groupurl=" + strings.TrimSpace(self.GetString("groupurl"))
+	}
+
+	if channel.TSoc == "on" {
+		param += "&tsoc=" + channel.TSoc
+		param += "&tsoctime=3600" //+ strings.TrimSpace(self.GetString("tsoctime"))
+	}
+
+	//请求api
+	_, err := libs.SaveChannelEntity(channel, param)
+
+	// err := models.ChannelAdd(channel);
+
+	if err != nil {
+		self.ajaxMsg(err.Error(), MSG_ERR)
+	}
+	self.ajaxMsg("", MSG_OK)
 }
 
 func (self *ChannelController) AjaxDel() {
 	id := self.GetString("id", "")
 	ApiUpdate, _ := models.ChannelGetById(id)
 	if ApiUpdate != nil {
-		if err := ApiUpdate.Delete(); err != nil {
+		if _, err := libs.DeleteChannel(ApiUpdate); err != nil {
 			self.ajaxMsg(err.Error(), MSG_ERR)
 		}
 	}
