@@ -97,8 +97,6 @@ func AutoCheckSerial() {
 
 		if valid {
 			models.SerialValid = true
-		} else {
-			models.SerialValid = false
 		}
 
 		serial.Update()
@@ -112,8 +110,6 @@ func ManualCheckSerial(serialCode string) *models.Serial {
 	valid := CheckSerial(serial)
 	if valid {
 		models.SerialValid = true
-	} else {
-		models.SerialValid = false
 	}
 	serial.Update()
 
