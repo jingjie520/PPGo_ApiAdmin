@@ -88,10 +88,10 @@ func doRequest(url string, param string) (int, interface{}) {
 	if err != nil {
 		return 500, err.Error()
 	}
-	return formatToJson(html)
+	return FormatToJson(html)
 }
 
-func formatToJson(jsonString string) (int, interface{}) {
+func FormatToJson(jsonString string) (int, interface{}) {
 	var dat map[string]interface{}
 	if err := json.Unmarshal([]byte(jsonString), &dat); err != nil {
 		return 500, "返回的内容不是json格式，无法识别"

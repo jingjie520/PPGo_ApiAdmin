@@ -19,6 +19,10 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
+// SerialValid 序列号是否有效
+
+var SerialValid bool = false
+
 func Init() {
 	dbhost := beego.AppConfig.String("db.host")
 	dbport := beego.AppConfig.String("db.port")
@@ -36,7 +40,7 @@ func Init() {
 		dsn = dsn + "&loc=" + url.QueryEscape(timezone)
 	}
 	orm.RegisterDataBase("default", "mysql", dsn)
-	orm.RegisterModel(new(Auth), new(Role), new(RoleAuth), new(Admin),
+	orm.RegisterModel(new(Auth), new(Role), new(RoleAuth), new(Admin), new(Serial),
 		new(Group), new(Env), new(Code), new(ApiSource), new(ApiDetail), new(ApiPublic), new(Template))
 
 	if beego.AppConfig.String("runmode") == "dev" {
@@ -47,6 +51,7 @@ func Init() {
 	InitMongo()
 
 	GetMgo()
+
 }
 
 var IptvUrl string = "" //iptv地址

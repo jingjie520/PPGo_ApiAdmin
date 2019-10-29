@@ -7,8 +7,8 @@ import (
 	"fmt"
 )
 
-var AesKey string = "hgfedcba12345678"
-var Gsm_IV string = "000010000000010000000100"
+var AesKey string = "HQECux7Tt6UrGOUl"
+var Gsm_IV string = "000000010000010000000010"
 
 func AesEncrypt(text string) string {
 	return encrypt(text)
@@ -66,5 +66,5 @@ func decrypt(data string) string {
 		panic(err.Error())
 	}
 
-	return fmt.Sprintf("%x", plaintext)
+	return string(plaintext)
 }
