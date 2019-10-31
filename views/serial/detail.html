@@ -52,7 +52,7 @@
             $.post('{{urlfor "SerialController.AjaxSave"}}', form_data, function (out) {
                 if (out.status === 0) {
                     layer.msg("更新注册码成功", {icon: 1}, function () {
-                        window.location.href = './detail'
+                        top.location.href = '/'
                     })
                 } else {
                     layer.msg(out.message)
@@ -60,6 +60,7 @@
             }, "json");
             return false;
         });
+
         form.render();
     });
 </script>

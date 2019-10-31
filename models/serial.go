@@ -24,7 +24,7 @@ type Serial struct {
 }
 
 type SerialData struct {
-	ValidTime    string `json:"expire"`
+	ValidTime    string `json:"validTime"`
 	HardwareCode string `json:"serial"`
 }
 
