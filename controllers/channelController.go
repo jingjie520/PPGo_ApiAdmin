@@ -47,6 +47,9 @@ func (self *ChannelController) Table() {
 		row["tsoc"] = v.TSoc
 		row["toaac"] = v.ToAac
 		row["demux"] = v.DeMux
+		row["curGroup"] = v.CurGroup
+		row["curSingle"] = v.CurSingle
+		row["curVod"] = v.CurVod
 		list[k] = row
 	}
 	self.ajaxList("成功", MSG_OK, count, list)

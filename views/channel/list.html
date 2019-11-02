@@ -65,19 +65,19 @@
                 }
                 , {
                     field: 'demux', width: 100, title: '节目状态', templet: function (d) {
-                        return Snow.getDemux(d.toaac);
+                        return Snow.getDemux(d.demux);
                     }
                 }, {
                     field: 'curGroup', width: 100, title: '组播状态', templet: function (d) {
-                        return Snow.getOnOrOff(d.toaac);
+                        return Snow.getStartOrStop(d.curGroup);
                     }
                 }, {
                     field: 'curSingle', width: 100, title: '单播状态', templet: function (d) {
-                        return Snow.getOnOrOff(d.toaac);
+                        return Snow.getStartOrStop(d.curSingle);
                     }
                 }, {
                     field: 'curVod', width: 100, title: '回看状态', templet: function (d) {
-                        return Snow.getOnOrOff(d.toaac);
+                        return Snow.getStartOrStop(d.curVod);
                     }
                 }
                 , {fixed: 'right', width: 210, align: 'center', toolbar: '#bar'}
