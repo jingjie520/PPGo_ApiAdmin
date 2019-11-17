@@ -15,3 +15,10 @@ Stream Console 用于管理频道
 访问：http://your_host:8081
 
 用户名：admin 密码：123qwe
+
+---
+###发布方法
+```
+bee pack -be GOOS=linux
+
+```

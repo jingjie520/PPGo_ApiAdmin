@@ -55,6 +55,17 @@ func (self *ChannelController) Table() {
 	self.ajaxList("成功", MSG_OK, count, list)
 }
 
+func (self *ChannelController) All() {
+	data := libs.ManageAll()
+	out := make(map[string]interface{})
+	out["code"] = 0
+	out["成功"] = "成功"
+	out["data"] = data
+	self.Data["json"] = out
+	self.ServeJSON()
+	self.StopRun()
+}
+
 func (self *ChannelController) Add() {
 	self.Data["pageTitle"] = "新增频道"
 
@@ -192,6 +203,10 @@ func (self *ChannelController) AjaxSave() {
 
 	if id == "" {
 		param = "type=add"
+		param += "&curgroup=stop"
+		param += "&cursingle=stop"
+		param += "&curvod=stop"
+
 		// 检查登录名是否已经存在
 		_, err := models.ChannelGetByName(channel.Name)
 		if err == nil {
@@ -206,7 +221,7 @@ func (self *ChannelController) AjaxSave() {
 		}
 	}
 
-	param = "type=add&id=" + channel.ChannelID
+	param += "&id=" + channel.ChannelID
 	param += "&name=" + url.QueryEscape(channel.Name)
 	param += "&src=" + url.QueryEscape(channel.Src)
 	param += "&mode=" + strings.TrimSpace(self.GetString("mode"))
@@ -214,6 +229,7 @@ func (self *ChannelController) AjaxSave() {
 	param += "&single=" + channel.Single
 	param += "&group=" + channel.Group
 	param += "&toaac=" + channel.ToAac
+	param += "&tsoc=" + channel.TSoc
 
 	if strings.TrimSpace(self.GetString("mode")) == "group" {
 		param += "&netcardin=" + strings.TrimSpace(self.GetString("netcardin"))
@@ -221,7 +237,7 @@ func (self *ChannelController) AjaxSave() {
 	}
 
 	if channel.Vod == "on" {
-		param += "&vodTime=36000" //+ strings.TrimSpace(self.GetString("vodTime"))
+		param += "&vodtime=36000" //+ strings.TrimSpace(self.GetString("vodTime"))
 		param += "&vodpath=" + strings.TrimSpace(self.GetString("vodpath"))
 	}
 
@@ -231,7 +247,6 @@ func (self *ChannelController) AjaxSave() {
 	}
 
 	if channel.TSoc == "on" {
-		param += "&tsoc=" + channel.TSoc
 		param += "&tsoctime=3600" //+ strings.TrimSpace(self.GetString("tsoctime"))
 	}
 

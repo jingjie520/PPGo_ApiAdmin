@@ -1,0 +1,57 @@
+<div style="padding-left: 40px;margin-top: 20px;">
+    <form class="layui-form" action="" method="post" style="margin: 50px auto; width: 580px">
+
+        <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px; ">
+            <legend>流媒体服务</legend>
+            <div style="padding: 10px">
+                <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="restartService">重启
+                </button>
+            </div>
+        </fieldset>
+
+
+        <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px; ">
+            <legend>服务器</legend>
+            <div style="padding: 10px">
+                <button type="button" class="layui-btn layui-btn-warm" lay-submit lay-filter="restart">重启</button>
+                <button type="button" class="layui-btn layui-btn-danger" lay-submit lay-filter="shutdown">关机</button>
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+<script>
+    var $;
+    layui.config({
+        base: "js/"
+    }).use(['form', 'element', 'layer', 'jquery'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        var $ = layui.jquery;
+
+        form.on('submit(restartService)', function (data) {
+            doExec('{{urlfor "GuardController.Restart_Service"}}');
+            return false;
+        });
+
+        form.on('submit(restart)', function (data) {
+            doExec('{{urlfor "GuardController.Restart"}}');
+            return false;
+        });
+
+        form.on('submit(shutdown)', function (data) {
+            doExec('{{urlfor "GuardController.Shutdown"}}');
+            return false;
+        });
+
+        function doExec(url) {
+            var form_data = {};
+            $.post(url, form_data, function (out) {
+                layer.msg(out.message)
+            }, "json");
+        }
+
+        form.render();
+    });
+
+</script>

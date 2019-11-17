@@ -65,7 +65,7 @@
                     <select name="netcardin"  lay-search="" style="width: 100%">
                         <option value="*">*(all)</option>
                         {{range $index,$elem := .netcards}}
-                            <option value="{{$elem.Name}}"   {{if eq $elem.Name $.Source.netcardin}} selected {{end}} > {{$elem.Name}}({{$elem.Ip}}}})</option>
+                            <option value="{{$elem.Name}}" {{if eq $elem.Name $.Source.netcardin}} selected {{end}} > {{$elem.Name}}({{$elem.Ip}})</option>
                         {{end}}
                     </select>
                 </div>
@@ -88,7 +88,7 @@
                 <div class="layui-input-inline">
                     <select name="group" lay-verify="required" lay-search="" style="width: 100%"
                             lay-filter="groupChange">
-                        <option value="off" {{if eq "on" $.Source.group}} selected {{end}}>OFF</option>
+                        <option value="off" {{if eq "off" $.Source.group}} selected {{end}}>OFF</option>
                         <option value="on" {{if eq "on" $.Source.group}} selected {{end}}>ON</option>
                     </select>
                 </div>
@@ -115,7 +115,7 @@
                     <select name="netcard"  lay-search="" style="width: 100%">
                         <option value="*">*(all)</option>
                         {{range $index,$elem := .netcards}}
-                            <option value="{{$elem.Name}}" {{if eq $elem.Name $.Source.netcard}} selected {{end}}> {{$elem.Name}}({{$elem.Ip}}}})</option>
+                            <option value="{{$elem.Name}}" {{if eq $elem.Name $.Source.netcard}} selected {{end}}> {{$elem.Name}}({{$elem.Ip}})</option>
                         {{end}}
                     </select>
                 </div>
@@ -127,7 +127,7 @@
                 <label class="layui-form-label">回看</label>
                 <div class="layui-input-inline">
                     <select name="vod" lay-verify="required" lay-search="" style="width: 100%">
-                        <option value="off" {{if eq "on" $.Source.vod}} selected {{end}}>OFF</option>
+                        <option value="off" {{if eq "off" $.Source.vod}} selected {{end}}>OFF</option>
                         <option value="on" {{if eq "on" $.Source.vod}} selected {{end}}>ON</option>
                     </select>
                 </div>
@@ -138,7 +138,7 @@
                 <label class="layui-form-label">时移</label>
                 <div class="layui-input-inline">
                     <select name="tsoc"  lay-search="" style="width: 100%">
-                        <option value="off" {{if eq "on" $.Source.tsoc}} selected {{end}}>OFF</option>
+                        <option value="off" {{if eq "off" $.Source.tsoc}} selected {{end}}>OFF</option>
                         <option value="on" {{if eq "on" $.Source.tsoc}} selected {{end}}>ON</option>
                     </select>
                 </div>
@@ -150,7 +150,7 @@
                     <label class="layui-form-label">音频转码</label>
                     <div class="layui-input-inline">
                         <select name="toaac"  lay-search="" style="width: 100%">
-                            <option value="off" {{if eq "on" $.Source.toaac}} selected {{end}}>OFF</option>
+                            <option value="off" {{if eq "off" $.Source.toaac}} selected {{end}}>OFF</option>
                             <option value="on" {{if eq "on" $.Source.toaac}} selected {{end}}>ON</option>
                         </select>
                     </div>
@@ -206,7 +206,7 @@
             //form.render('select');
         });
 
-        {{if eq "on" $.Source.mode}}
+        {{if eq "group" $.Source.mode}}
         $(".group-container").show();
         {{end}}
 

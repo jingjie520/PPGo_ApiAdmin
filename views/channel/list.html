@@ -33,9 +33,9 @@
         //方法级渲染
         table.render({
             elem: '#table_list'
-            , url: './table'
+            , url: './all'
             , cols: [[
-                {field: 'channelID', title: '节目ID', align: 'center', sort: false, width: 120}
+                {field: 'id', title: '节目ID', align: 'center', sort: false, width: 120}
                 , {field: 'name', title: '节目名称'}
                 , {field: 'src', title: '源流地址'}
                 , {
@@ -68,22 +68,22 @@
                         return Snow.getDemux(d.demux);
                     }
                 }, {
-                    field: 'curGroup', width: 100, title: '组播状态', templet: function (d) {
-                        return Snow.getStartOrStop(d.curGroup);
+                    field: 'cur_group', width: 100, title: '组播状态', templet: function (d) {
+                        return Snow.getStartOrStop(d.cur_group);
                     }
                 }, {
-                    field: 'curSingle', width: 100, title: '单播状态', templet: function (d) {
-                        return Snow.getStartOrStop(d.curSingle);
+                    field: 'cur_single', width: 100, title: '单播状态', templet: function (d) {
+                        return Snow.getStartOrStop(d.cur_single);
                     }
                 }, {
-                    field: 'curVod', width: 100, title: '回看状态', templet: function (d) {
-                        return Snow.getStartOrStop(d.curVod);
+                    field: 'cur_vod', width: 100, title: '回看状态', templet: function (d) {
+                        return Snow.getStartOrStop(d.cur_vod);
                     }
                 }
                 , {fixed: 'right', width: 210, align: 'center', toolbar: '#bar'}
             ]]
             , id: 'listReload'
-            , page: true
+            , page: false
             , height: "full-130"
         });
 
@@ -111,7 +111,7 @@
                     shade: 0.3,
                     id: 1,
                     title: "启动-" + data.name,
-                    content: '{{urlfor "ChannelController.ActionStart"}}?id=' + data.id,
+                    content: '{{urlfor "ChannelController.ActionStart"}}?id=' + data._id.$oid,
                     area: ['480px', '210px'],
                 });
             } else if (obj.event === 'stop') {
@@ -120,12 +120,12 @@
                     shade: 0.3,
                     id: 1,
                     title: "停止-" + data.name,
-                    content: '{{urlfor "ChannelController.ActionStop"}}?id=' + data.id,
+                    content: '{{urlfor "ChannelController.ActionStop"}}?id=' + data._id.$oid,
                     area: ['480px', '210px'],
                 });
             } else if (obj.event === 'del') {
                 layer.confirm('真的删除【' + data.name + '】频道么', function (index) {
-                    var jsData = {'id': data.id};
+                    var jsData = {'id': data._id.$oid};
                     $.post('{{urlfor "ChannelController.AjaxDel"}}', jsData, function (out) {
                         if (out.status === 0) {
                             layer.alert('删除成功了', {icon: 1}, function (index) {
@@ -140,7 +140,7 @@
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
-                window.location.href = './edit?id=' + data.id
+                window.location.href = './edit?id=' + data._id.$oid
             }
         });
 

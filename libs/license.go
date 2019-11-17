@@ -17,7 +17,7 @@ func CheckSerial(serial *models.Serial) bool {
 		return false
 	} else {
 		code, dat := FormatToJson(hardwareCode)
-		if code == 200 {
+		if code == 200 || code == 404 {
 			netcards := dat.(map[string]interface{})["serial"]
 			serial.HardwareCode = netcards.(string)
 		}

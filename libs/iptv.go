@@ -2,6 +2,7 @@ package libs
 
 import (
 	"encoding/json"
+	"fmt"
 	"streamConsole/models"
 	"streamConsole/utils"
 )
@@ -55,7 +56,7 @@ func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
 		param += "&vod=" + channel.Vod
 	}
 	if channel.TSoc != "" {
-		param += "&tSoc=" + channel.TSoc
+		param += "&tsoc=" + channel.TSoc
 	}
 
 	return doRequestGet(url, param)
@@ -64,7 +65,15 @@ func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
 
 func SaveChannelEntity(channel *models.ChannelEntity, param string) (string, error) {
 	url := "/manage"
-	return doRequestGet(url, param)
+
+	msg, err := doRequestGet(url, param)
+	if err == nil {
+		//手动停止频道
+		url = "/channel"
+		param = fmt.Sprintf("id=%s&group=stop&single=stop&vod=stop&tsoc=stop", channel.ChannelID)
+		return doRequestGet(url, param)
+	}
+	return msg, err
 }
 
 func ManageAll() interface{} {
