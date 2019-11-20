@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"streamConsole/libs"
 	"streamConsole/models"
+	"streamConsole/utils"
 	"strings"
 )
 
@@ -270,4 +271,88 @@ func (self *ChannelController) AjaxDel() {
 		}
 	}
 	self.ajaxMsg("", MSG_OK)
+}
+
+func (self *ChannelController) BatchActionStart() {
+	if self.Ctx.Request.Method == "POST" {
+		self.AjaxBatchStartSave()
+	} else {
+		ids := self.GetString("ids", "")
+		self.Data["pageTitle"] = "批量启动频道"
+		row := make(map[string]interface{})
+		row["ids"] = ids
+		self.Data["Source"] = row
+		self.display()
+	}
+}
+
+func (self *ChannelController) BatchActionStop() {
+	if self.Ctx.Request.Method == "POST" {
+		self.AjaxBatchStartSave()
+	} else {
+		self.Data["pageTitle"] = "批量停止频道"
+		ids := self.GetString("ids", "")
+		row := make(map[string]interface{})
+		row["ids"] = ids
+		self.Data["Source"] = row
+		self.display()
+	}
+}
+
+func (self *ChannelController) AjaxBatchStartSave() {
+
+	utils.ConsoleLogs.Info("POST")
+
+	ids := self.GetString("ids", "")
+	if ids != "" {
+		channel := new(models.ChannelEntity)
+		channel.Group = strings.TrimSpace(self.GetString("group"))
+		channel.Single = strings.TrimSpace(self.GetString("single"))
+		channel.Vod = strings.TrimSpace(self.GetString("vod"))
+		channel.TSoc = strings.TrimSpace(self.GetString("tsoc"))
+
+		idList := strings.Split(ids, ",")
+
+		var err error
+
+		for _, v := range idList {
+			channel.ChannelID = v
+			_, err = libs.SaveChannelStatus(channel)
+			if err != nil {
+				break
+			}
+		}
+
+		if err == nil {
+			self.ajaxMsg("", MSG_OK)
+		} else {
+			self.ajaxMsg(err.Error(), MSG_ERR)
+		}
+	} else {
+		self.ajaxMsg("记录不存在", MSG_ERR)
+	}
+}
+
+func (self *ChannelController) AjaxBatchDelete() {
+	ids := self.GetString("ids", "")
+	if ids != "" {
+		idList := strings.Split(ids, ",")
+
+		var err error
+
+		for _, v := range idList {
+			_, err = libs.DeleteChannelById(v)
+			if err != nil {
+				break
+			}
+		}
+
+		if err == nil {
+			self.ajaxMsg("", MSG_OK)
+		} else {
+			self.ajaxMsg(err.Error(), MSG_ERR)
+		}
+	} else {
+		self.ajaxMsg("记录不存在", MSG_ERR)
+	}
 }

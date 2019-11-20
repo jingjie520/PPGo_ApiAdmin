@@ -20,7 +20,6 @@ import (
 )
 
 // SerialValid 序列号是否有效
-
 var SerialValid bool = false
 
 func Init() {

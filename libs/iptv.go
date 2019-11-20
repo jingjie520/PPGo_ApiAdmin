@@ -42,6 +42,12 @@ func DeleteChannel(channel *models.ChannelEntity) (string, error) {
 	return doRequestGet(url, param)
 }
 
+func DeleteChannelById(id string) (string, error) {
+	url := "/manage"
+	param := "type=delete&id=" + id
+	return doRequestGet(url, param)
+}
+
 func SaveChannelStatus(channel *models.ChannelEntity) (string, error) {
 	url := "/channel"
 	param := "id=" + channel.ChannelID

@@ -4,6 +4,10 @@
         <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px; ">
             <legend>流媒体服务</legend>
             <div style="padding: 10px">
+
+
+                <blockquote class="layui-elem-quote" style="margin: 8px 0">* 流媒体重启Shell：/opt/iptv/restart.sh</blockquote>
+
                 <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="restartService">重启
                 </button>
             </div>
@@ -30,25 +34,28 @@
         var $ = layui.jquery;
 
         form.on('submit(restartService)', function (data) {
-            doExec('{{urlfor "GuardController.Restart_Service"}}');
+            doExec('{{urlfor "GuardController.Restart_Service"}}', "重启流媒体");
             return false;
         });
 
         form.on('submit(restart)', function (data) {
-            doExec('{{urlfor "GuardController.Restart"}}');
+            doExec('{{urlfor "GuardController.Restart"}}', "重启服务器");
             return false;
         });
 
         form.on('submit(shutdown)', function (data) {
-            doExec('{{urlfor "GuardController.Shutdown"}}');
+            doExec('{{urlfor "GuardController.Shutdown"}}', "关闭服务器");
             return false;
         });
 
-        function doExec(url) {
-            var form_data = {};
-            $.post(url, form_data, function (out) {
-                layer.msg(out.message)
-            }, "json");
+        function doExec(url, title) {
+            layer.confirm('是否' + title, function (index) {
+                var form_data = {};
+                $.post(url, form_data, function (out) {
+                    layer.msg(out.message)
+                }, "json");
+                layer.close(index);
+            });
         }
 
         form.render();

@@ -18,7 +18,7 @@ func DoExec(cmd string) (string, error) {
 	case "shutdown":
 		shellString = "shutdown -h now"
 	case "restartService":
-		shellString = "./run.sh restart"
+		shellString = `/opt/iptv/restart.sh`
 
 	default:
 		shellString = " echo 'Please enter the command.'"

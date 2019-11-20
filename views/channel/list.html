@@ -2,6 +2,9 @@
     <div class="layui-row" style="margin-top: 20px;">
         <div class="layui-col-xs6">
             <a class="layui-btn" id="add_channel">新增</a>
+            <a class="layui-btn" id="start_channel">批量启动</a>
+            <a class="layui-btn" id="stop_channel">批量停止</a>
+            <a class="layui-btn" id="delete_channel">批量删除</a>
         </div>
         <div class="layui-col-xs6 search_text">
             <form class="layui-form" action="" onsubmit="javascript:return false;">
@@ -35,6 +38,7 @@
             elem: '#table_list'
             , url: './all'
             , cols: [[
+                {type: 'checkbox'},
                 {field: 'id', title: '节目ID', align: 'center', sort: false, width: 120}
                 , {field: 'name', title: '节目名称'}
                 , {field: 'src', title: '源流地址'}
@@ -97,10 +101,58 @@
             }
         };
 
+        window.getCheckId = function () {
+            var checkStatus = table.checkStatus('listReload'), data = checkStatus.data, arr = [];
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].id);
+            }
+            return arr.toString();
+        };
+
+        window.batchOpen = function (act, title) {
+            var ids = getCheckId();
+            layer.open({
+                type: 2,
+                shade: 0.3,
+                id: 1,
+                title: title,
+                content: act + '?ids=' + ids,
+                area: ['480px', '210px'],
+            });
+        };
 
         $("#add_channel").on("click", function () {
             window.location.href = "./add"
         });
+
+        $("#start_channel").on("click", function () {
+            batchOpen('{{urlfor "ChannelController.BatchActionStart"}}', "批量启动");
+        });
+
+        $("#stop_channel").on("click", function () {
+            batchOpen('{{urlfor "ChannelController.BatchActionStop"}}', "批量停止");
+        });
+
+        $("#delete_channel").on("click", function () {
+            var ids = getCheckId();
+            layer.confirm('真的删除[' + ids + ']这些频道么', function (index) {
+                var jsData = {'ids': ids};
+                $.post('{{urlfor "ChannelController.AjaxBatchDelete"}}', jsData, function (out) {
+                    if (out.status === 0) {
+                        layer.alert('删除成功了', {icon: 1}, function (index) {
+                            layer.close(index);
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(out.message)
+                    }
+                }, "json");
+                obj.del();
+                layer.close(index);
+            });
+
+        });
+
 
         //监听工具条
         table.on('tool(table_filter)', function (obj) {
@@ -148,6 +200,7 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
+
     });
 
 </script>
