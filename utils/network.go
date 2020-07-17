@@ -9,7 +9,7 @@ import (
 * 发起HTTP请求
  */
 func HttpGet(url string) (string, error) {
-	ConsoleLogs.Info("发起请求：%s", url)
+	ConsoleLogs.Debug("发起请求：%s", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
@@ -21,6 +21,6 @@ func HttpGet(url string) (string, error) {
 		return "", err
 	}
 
-	ConsoleLogs.Info("Resp：%s", body)
+	ConsoleLogs.Debug("Resp：%s", body)
 	return string(body), nil
 }

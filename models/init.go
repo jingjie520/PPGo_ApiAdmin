@@ -79,10 +79,10 @@ func InitMongo() {
 
 func GetMgo() *mgo.Session {
 
-	utils.ConsoleLogs.Info(MongodbAddr)
-	utils.ConsoleLogs.Info(MongodbName)
-	utils.ConsoleLogs.Info(MongodbUser)
-	utils.ConsoleLogs.Info(MongodbPasswd)
+	utils.ConsoleLogs.Debug(MongodbAddr)
+	utils.ConsoleLogs.Debug(MongodbName)
+	utils.ConsoleLogs.Debug(MongodbUser)
+	utils.ConsoleLogs.Debug(MongodbPasswd)
 
 	if mgoSession == nil {
 		var err error
